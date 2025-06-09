@@ -55,7 +55,7 @@ export function QuizResults({ score, totalQuestions, answers, questions, quizTit
                         </button>
                         <Link
                             href="/select"
-                            className="flex-1 flex items-center justify-center bg-slate-300 dark:text-white dark:bg-slate-500 text-gray-700 py-3 px-4 sm:px-6 rounded-lg font-medium hover:!text-gray-600 hover:!bg-gray-200 transition-colors text-sm"
+                            className="flex-1 flex items-center justify-center bg-slate-300 dark:text-white dark:bg-slate-500 text-gray-700 py-3 px-4 sm:px-6 rounded-lg font-medium hover:!text-gray-600 hover:!bg-gray-200 transition-colors text-sm !text-white"
                         >
                             بازگشت به آزمون ها
                         </Link>

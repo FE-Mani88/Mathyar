@@ -5,7 +5,7 @@ import { DIFFICULTY_COLORS } from '@/utils/constants'
 import { Clock, BookOpen, GraduationCap, BarChart, List } from 'lucide-react'
 import { ActiveQuiz } from '@/components/modules/ActiveQuiz/ActiveQuiz'
 
-export default function AllTemplate({ id, questions, imageUrl, title, difficulty, topics, grade, description, duration }) {
+export default function QuizDetailsTemplate({ id, questions, imageUrl, title, difficulty, topics, grade, description, duration }) {
 
     const [isQuizStarted, setIsQuizStarted] = useState(null)
 

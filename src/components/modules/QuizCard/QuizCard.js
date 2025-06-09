@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Clock, BookOpen, BarChart, CheckCircle } from 'lucide-react';
 import { DIFFICULTY_COLORS } from '@/utils/constants';
 
-export default function QuizCard({ id, title, description, difficulty, duration, totalQuestions, imageUrl }) {
+export default function QuizCard({ id, title, description,questions, difficulty, duration, totalQuestions, imageUrl }) {
 
     const [isDark, setIsDark] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -49,7 +49,7 @@ export default function QuizCard({ id, title, description, difficulty, duration,
                             </div>
                             <div className="flex items-center space-x-2 dark:text-white gap-1">
                                 <BookOpen className="w-4 h-4" />
-                                <span className='flex gap-1'> <p>سوال</p> {totalQuestions} </span>
+                                <span className='flex gap-1'> <p>سوال</p> {questions.length} </span>
                             </div>
                             <div className="flex items-center gap-1 space-x-2 dark:text-white">
                                 <BarChart className="w-4 h-4" />

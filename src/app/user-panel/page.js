@@ -2,6 +2,8 @@ import React from 'react'
 import UserPanelLayout from '@/components/layouts/UserPanelLayout/UserPanelLayout'
 import { authUser } from '@/utils/serverheplers'
 import SweetAlertModal from '@/components/modules/SweetAlertModal/SweetAlertModal'
+import { BookOpenText, CheckCircle, Percent, Users } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function page() {
     const user = await authUser()
@@ -13,10 +15,10 @@ export default async function page() {
     }
 
     const stats = [
-        { title: "Projects", count: 18, completed: 2 },
-        { title: "Active Task", count: 132, completed: 28 },
-        { title: "Teams", count: 12, completed: 1 },
-        { title: "Productivity", count: "76%", completed: "5%" },
+        { title: "Projects", count: 18, icon: <Users /> },
+        { title: "Active Task", count: 132, icon: <BookOpenText /> },
+        { title: "Teams", count: 12, icon: <CheckCircle /> },
+        { title: "Productivity", count: "76%", icon: <Percent /> },
     ];
 
     const projects = [
@@ -31,20 +33,33 @@ export default async function page() {
     return (
         <>
             <UserPanelLayout>
-                <div className="min-h-screen bg-gray-100 p-6 text-sm">
-                    <div className="flex justify-between items-center mb-6">
-                        <h1 className="!text-2xl !font-semibold">آزمون های داده شده</h1>
-                        <button className="bg-purple-600 !text-white !px-4 !py-2 rounded">شرکت در آزمون</button>
-                    </div>
-
-                    <div className="grid grid-cols-4 gap-4 mb-8">
-                        {stats.map((stat, idx) => (
-                            <div key={idx} className="bg-white rounded p-4 shadow">
-                                <div className="text-sm text-gray-500">{stat.title}</div>
-                                <div className="text-2xl font-bold">{stat.count}</div>
-                                <div className="text-xs text-gray-400">{stat.completed} Completed</div>
+                <div className="min-h-screen bg-gray-100 pb-6 text-sm">
+                    <div className='bg-[#624bff] py-4'>
+                        <div className='px-6'>
+                            <div className="flex justify-between items-center mb-6">
+                                <h1 className="!text-2xl text-white">آزمون های داده شده</h1>
+                                <button className="bg-white !text-black !px-4 !py-2 rounded">
+                                    <Link href='/select'>شرکت در آزمون جدید</Link>
+                                </button>
                             </div>
-                        ))}
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                                {stats.map((stat, idx) => (
+                                    <div key={idx} className="bg-white rounded p-4 shadow">
+                                        <div className='flex justify-between items-center'>
+                                            <div className="text-sm text-gray-500">{stat.title}</div>
+                                            {/* Start SVG */}
+                                            <div className="bg-indigo-100 text-indigo-600 w-10 h-10 flex items-center justify-center rounded-md">
+                                                {stat.icon}
+                                            </div>
+                                            {/* End SVG */}
+                                        </div>
+                                        <div className="text-2xl font-bold">{stat.count}</div>
+                                        <div className="text-xs text-gray-400">{stat.completed} Completed</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="bg-white p-4 rounded shadow">

@@ -2,8 +2,11 @@ import React from 'react'
 import connectToDB from '../../../../configs/connectToDB'
 import quizModel from '../../../../models/Quizzes'
 import QuizDetails from '@/components/templates/QuizDetails/QuizDetails'
+import Header from '@/components/modules/Navbar/Navbar'
+import { authUser } from '@/utils/serverheplers'
 
 export default async function page({ params }) {
+    const user = await authUser()
 
     await connectToDB()
 

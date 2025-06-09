@@ -66,3 +66,21 @@
     </div>
   </div>
 </div>
+
+
+////////////////////////////////////////
+// const user = await authUser()
+
+// const submitQuizResultHandler = async () => {
+//     const res = await fetch('/api/quizzesResults', {
+//         method: "POST",
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             correctAnswersPercentage: percentage,
+//             correctAnswersNumber: score,
+//             user: user
+//         })
+//     })
+// }

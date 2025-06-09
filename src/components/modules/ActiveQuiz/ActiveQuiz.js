@@ -33,14 +33,17 @@ export function ActiveQuiz({ id, questions, duration, title }) {
     }
   };
 
-  const finishQuiz = () => {
-    setIsFinished(true);
-  };
-
+  
   const calculateScore = () => {
     return answers.reduce((score, answer, index) => {
+      // console.log('Answer =>', answer, 'Score =>', score)
       return answer === questions[index].correctAnswer ? score + 1 : score;
     }, 0);
+  };
+  
+  const finishQuiz = async () => {
+
+    setIsFinished(true);
   };
 
   const handleRetry = () => {
@@ -66,7 +69,7 @@ export function ActiveQuiz({ id, questions, duration, title }) {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 py-12 px-4 dark:bg-[#121a29] transition-all mt-8">
+      <div className="min-h-screen bg-gray-50 py-12 px-4 dark:bg-[#121a29] transition-all">
         <div className="max-w-3xl mx-auto">
           <QuizProgress
             currentQuestion={currentQuestion + 1}
