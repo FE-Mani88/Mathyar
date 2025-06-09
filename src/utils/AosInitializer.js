@@ -8,6 +8,7 @@ export default function AosInitializer() {
     AOS.init({
       duration: 1000,
       easing: 'ease-out-cubic',
+      once: true
     });
 
     // اطمینان از تریگر شدن برای عناصر دیرتر لود شده

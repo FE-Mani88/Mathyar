@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
@@ -19,6 +18,8 @@ import {
   Search,
 } from 'lucide-react';
 import Link from 'next/link';
+import Swal from 'sweetalert2';
+import { redirect } from 'next/navigation';
 
 export default function UserPanelLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,6 +43,43 @@ export default function UserPanelLayout({ children }) {
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);
   };
+
+  const UserLogoutHandler = async () => {
+    Swal.fire({
+      title: 'آیا از خروج از حساب کاربری خود اطمینان دارید؟',
+      icon: 'warning',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'بله',
+      cancelButtonText: 'بازگشت',
+      cancelButtonColor: '#E53935'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch('/api/auth/signout')
+        if (res.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'با موفقیت خارج شدید',
+            showConfirmButton: true,
+            confirmButtonText: 'بازگشت به صفحه اصلی'
+          }).then(() => {
+            redirect('/')
+          })
+        } else {
+          Swal.fire({
+            title: 'خطایی در خروج به وجود آمد'
+          })
+        }
+      } else {
+        Swal.fire({
+          title: 'تغییرات ذخیره نشدند',
+          icon: 'info',
+          showConfirmButton: true,
+          confirmButtonText: 'متوجه شدم'
+        })
+      }
+    })
+  }
 
   return (
     <div dir="rtl" className="min-h-screen bg-[#E6EDFF]">
@@ -103,17 +141,15 @@ export default function UserPanelLayout({ children }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed flex flex-col justify-between right-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-[#2C2F3B] text-white transform transition-transform duration-300 z-50 ${
-          isSidebarOpen
-            ? 'translate-x-0'
-            : '!translate-x-full md:!translate-x-0 md:translate-x-0'
-        }`}
+        className={`fixed flex flex-col justify-between right-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-[#2C2F3B] text-white transform transition-transform duration-300 z-50 ${isSidebarOpen
+          ? 'translate-x-0'
+          : '!translate-x-full md:!translate-x-0 md:translate-x-0'
+          }`}
       >
         <div className="p-6">
           <div
-            className={`text-xs uppercase tracking-wider text-gray-400 mb-2 ${
-              !user.username ? 'animate-pulse' : ''
-            }`}
+            className={`text-xs uppercase tracking-wider text-gray-400 mb-2 ${!user.username ? 'animate-pulse' : ''
+              }`}
           >
             سلام {user.username} عزیز
           </div>
@@ -121,27 +157,24 @@ export default function UserPanelLayout({ children }) {
           <nav className="space-y-1">
             <div
               onClick={() => toggleSection('integrations')}
-              className={`flex justify-between items-center hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors cursor-pointer ${
-                openSection === 'integrations' ? 'text-blue-400' : ''
-              }`}
+              className={`flex justify-between items-center hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors cursor-pointer ${openSection === 'integrations' ? 'text-blue-400' : ''
+                }`}
             >
               <div className="flex items-center">
                 <LayoutDashboard className="h-4 w-4 ml-3" />
                 <span>صفحات سایت</span>
               </div>
               <ChevronDown
-                className={`h-4 w-4 transition-transform duration-300 ${
-                  openSection === 'integrations' ? 'rotate-180' : ''
-                }`}
+                className={`h-4 w-4 transition-transform duration-300 ${openSection === 'integrations' ? 'rotate-180' : ''
+                  }`}
               />
             </div>
 
             <div
-              className={`pl-2 overflow-hidden transition-all duration-300 ${
-                openSection === 'integrations'
-                  ? 'max-h-40 opacity-100'
-                  : 'max-h-0 opacity-0'
-              } space-y-1 text-sm text-gray-300`}
+              className={`pl-2 overflow-hidden transition-all duration-300 ${openSection === 'integrations'
+                ? 'max-h-40 opacity-100'
+                : 'max-h-0 opacity-0'
+                } space-y-1 text-sm text-gray-300`}
             >
               <Link
                 href="/"
@@ -214,7 +247,7 @@ export default function UserPanelLayout({ children }) {
         </div>
 
         <div className="p-6">
-          <button className="flex items-center !text-red-600 hover:!text-white hover:!bg-red-700 w-full !text-center !py-2 !bg-[#363B4D] px-3 py-2 rounded-lg transition-colors">
+          <button className="flex items-center !text-red-600 hover:!text-white hover:!bg-red-700 w-full !text-center !py-2 !bg-[#363B4D] px-3 py-2 rounded-lg transition-colors" onClick={UserLogoutHandler}>
             <p className="!mx-auto flex gap-1">
               خروج از حساب
               <LogOut />
@@ -225,9 +258,8 @@ export default function UserPanelLayout({ children }) {
 
       {/* Main Content */}
       <main
-        className={`pt-14 transition-all duration-300 ${
-          isSidebarOpen ? 'md:mr-64' : 'mr-0 md:mr-64'
-        }`}
+        className={`pt-14 transition-all duration-300 ${isSidebarOpen ? 'md:mr-64' : 'mr-0 md:mr-64'
+          }`}
       >
         <div>{children}</div>
       </main>

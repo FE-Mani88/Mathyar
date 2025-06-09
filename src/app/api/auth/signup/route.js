@@ -37,7 +37,7 @@ export async function POST(req) {
         })
 
         return Response.json({
-            message: 'User Created Successfully :)'
+            message: 'User Created Successfully :)',
         }, { status: 201, headers: { "Set-Cookie": `token=${token};path=/;httpOnly=true;max-age=360000` } })
 
     } catch (error) {

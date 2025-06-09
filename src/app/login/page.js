@@ -4,6 +4,7 @@ import { User, Mail, Lock, Eye, EyeOff, Cookie, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -31,12 +32,14 @@ function Login() {
                 },
                 body: JSON.stringify(userDetails)
             })
+            
+            const data = await res.json()
 
             if (res.ok) {
-                toast.success('You have registered successfully')
+                toast.success('You are logged in successfully')
 
                 setTimeout(() => {
-                    router.push('/dashboard')
+                    router.replace(data.role === 'ADMIN' ? 'admin-panel' : 'user-panel')
                 }, 2500)
             } else if (res.status === 405) {
                 toast.error('Invalid Phone Number or Password')
@@ -44,11 +47,12 @@ function Login() {
                 toast.error('There is not any user with this details')
             }
 
-            console.log(res)
-
-
         } catch (error) {
             console.log(error)
+            return Swal.fire({
+                title: "خطایی به وجود اومد",
+                icon: 'error'
+            })
         }
 
     }

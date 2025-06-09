@@ -1,7 +1,16 @@
 import React from 'react'
 import UserPanelLayout from '@/components/layouts/UserPanelLayout/UserPanelLayout'
+import { authUser } from '@/utils/serverheplers'
+import SweetAlertModal from '@/components/modules/SweetAlertModal/SweetAlertModal'
 
-export default function page() {
+export default async function page() {
+    const user = await authUser()
+
+    if (!user) {
+        return <SweetAlertModal title='!زمان ورود شما منقضی شده است' icon='info' confirmButtonText='بازگشت به ورود' redirectURL='login' />
+    } else if (user.role !== 'USER') {
+        return <SweetAlertModal title='شما اجازه دسترسی به این صفحه را ندارید' icon='error' confirmButtonText='بازگشت به پنل کاربری' redirectURL='admin-panel' />
+    }
 
     const stats = [
         { title: "Projects", count: 18, completed: 2 },
@@ -53,9 +62,9 @@ export default function page() {
                                 <div>{proj.hours}</div>
                                 <div>
                                     <span className={`px-2 py-1 rounded text-white text-xs ${proj.priority === 'High' ? 'bg-red-500' :
-                                            proj.priority === 'Medium' ? 'bg-yellow-500' :
-                                                proj.priority === 'Low' ? 'bg-blue-500' :
-                                                    'bg-green-500'
+                                        proj.priority === 'Medium' ? 'bg-yellow-500' :
+                                            proj.priority === 'Low' ? 'bg-blue-500' :
+                                                'bg-green-500'
                                         }`}>{proj.priority}</span>
                                 </div>
                                 <div className="flex items-center gap-1">

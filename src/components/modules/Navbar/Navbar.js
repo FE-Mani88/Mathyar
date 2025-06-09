@@ -52,6 +52,12 @@ export default function Header({ isUserRegistered, user }) {
                                         </li>
                                         <li className='c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400'>
                                             <ChevronDown className='w-5 h-5' />
+                                            <Link href='/about-us'>
+                                                <span>درباره ما</span>
+                                            </Link>
+                                        </li>
+                                        <li className='c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400'>
+                                            <ChevronDown className='w-5 h-5' />
                                             <Link href='/'>
                                                 <span>صفحه اصلی</span>
                                             </Link>

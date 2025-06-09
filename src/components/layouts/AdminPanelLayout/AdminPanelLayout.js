@@ -16,7 +16,8 @@ import {
   Settings2,
   LogOut,
 } from "lucide-react";
-
+import Swal from "sweetalert2";
+import { redirect } from "next/navigation";
 
 export default function AdminPanelLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,6 +33,43 @@ export default function AdminPanelLayout({ children }) {
 
     getUser()
   }, [])
+
+  const AdminLogoutHandler = async () => {
+    Swal.fire({
+      title: 'آیا از خروج از حساب کاربری خود اطمینان دارید؟',
+      icon: 'warning',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'بله',
+      cancelButtonText: 'بازگشت',
+      cancelButtonColor: '#E53935'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await fetch('/api/auth/signout')
+        if (res.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'با موفقیت خارج شدید',
+            showConfirmButton: true,
+            confirmButtonText: 'بازگشت به صفحه اصلی'
+          }).then(() => {
+            redirect('/')
+          })
+        } else {
+          Swal.fire({
+            title: 'خطایی در خروج به وجود آمد'
+          })
+        }
+      } else {
+        Swal.fire({
+          title: 'تغییرات ذخیره نشدند',
+          icon: 'info',
+          showConfirmButton: true,
+          confirmButtonText: 'متوجه شدم'
+        })
+      }
+    })
+  }
 
   return (
     <div dir="rtl" className="min-h-screen bg-[#E6EDFF]">
@@ -69,7 +107,11 @@ export default function AdminPanelLayout({ children }) {
               <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                 {user.username?.trim()[0].toUpperCase()}
               </div>
-              <span className="hidden sm:block">{user?.username}</span>
+              <span className="hidden sm:block">
+                {user.username ? user.username : (
+                  <div className="w-20 h-3 bg-gray-300 animate-pulse"></div>
+                )}
+              </span>
             </div>
           </div>
         </div>
@@ -113,7 +155,7 @@ export default function AdminPanelLayout({ children }) {
 
         {/* Buttom Sidebar Items */}
         <div className="p-6">
-          <button className="flex items-center !text-red-600 hover:!text-white hover:!bg-red-700 text-blue-400 w-full !text-center !py-2 !bg-[#363B4D] px-3 py-2 rounded-lg transition-colors">
+          <button onClick={AdminLogoutHandler} className="flex items-center !text-red-600 hover:!text-white hover:!bg-red-700 text-blue-400 w-full !text-center !py-2 !bg-[#363B4D] px-3 py-2 rounded-lg transition-colors">
             <p className="!mx-auto flex gap-1">
               خروج از حساب
               <LogOut />

@@ -39,7 +39,7 @@ function Register() {
         toast.success('You have registered successfully :)')
 
         setTimeout(() => {
-          router.push('/dashboard')
+          router.push('/user-panel')
         }, 2500)
       } else if (res.status === 422) {
         toast.error('This user was registered before !')
