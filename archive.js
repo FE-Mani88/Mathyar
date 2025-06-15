@@ -1,4 +1,4 @@
-<div className="max-w-5xl mx-auto">
+{/* <div className="max-w-5xl mx-auto">
   <div className="mb-8">
     <h1 className="text-2xl font-semibold mb-4">برنامه‌نویسان حماسی</h1>
     <div className="flex flex-wrap gap-4 text-sm text-gray-600">
@@ -84,3 +84,13 @@
 //         })
 //     })
 // }
+
+
+
+const projects = [
+  { name: "Dropbox Design System", hours: 34, priority: "Medium", progress: 15 },
+  { name: "Slack Team UI Design", hours: 47, priority: "High", progress: 35 },
+  { name: "GitHub Satellite", hours: 120, priority: "Low", progress: 75 },
+  { name: "3D Character Modelling", hours: 89, priority: "Medium", progress: 63 },
+  { name: "Webapp Design System", hours: 108, priority: "Track", progress: 100 },
+]; */

@@ -1,23 +1,18 @@
-import { verifyToken } from "@/utils/auth";
-import { cookies } from "next/headers";
-import userModel from "../../../../../models/Users";
+import connectToDB from "../../../../../configs/connectToDB";
+import { authUser } from "@/utils/serverheplers";
 
-export async function GET(req, { params }) {
-    const configCookies = await cookies()
+export async function GET() {
+    await connectToDB()
 
-    const token = configCookies.get('token')
+    try {
+        const user = await authUser()
 
-    if (!token) {
-        return Response.json({ message: 'There is not any token in user cookies' }, { status: 401 })
+        if (!user) {
+            return Response.json({ message: 'User is not authorized !' }, { status: 401 })
+        }
+
+        return Response.json(user, { status: 200 })
+    } catch (error) {
+        return Response.json({ message: 'Unknow server error :(' }, { status: 500 })
     }
-
-    const tokenPayload = await verifyToken(token.value)
-
-    if (!tokenPayload) {
-        return Response.json({ message: 'User token is not valid' }, { status: 401 })
-    }
-
-    const mainUser = await userModel.findOne({ phoneNumber: tokenPayload.phoneNumber })
-
-    return Response.json(mainUser)
 }

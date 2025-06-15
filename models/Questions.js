@@ -19,7 +19,7 @@ const questionSchema = new mongoose.Schema({
         required: true,
         ref: 'Quiz'
     }
-})
+}, { timestamps: true })
 
 const questionModel = mongoose.models.Question || mongoose.model('Question', questionSchema)
 

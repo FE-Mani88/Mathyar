@@ -13,9 +13,11 @@ export default function Header({ isUserRegistered, user }) {
         if (isDark) {
             document.documentElement.classList.add('dark');
             localStorage.setItem('theme', 'dark')
+            document.cookie = "theme=dark; path=/; max-age=31536000" // 1 سال
         } else {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('theme', 'light')
+            document.cookie = "theme=light; path=/; max-age=31536000" // 1 سال
         }
     }, [isDark]);
 
@@ -35,9 +37,15 @@ export default function Header({ isUserRegistered, user }) {
                     <div className={`chip0 cglp6 c4mnq cd10w cdoit  sm:mx-0 flex ${isUserRegistered ? ' flex justify-between gap-[800px]' : ''}`}>
 
                         <nav className="chip0 cxgjn flex items-center">
-                            <ul className={`chip0 cxgjn cutr6 c4mnq cbv5p gap-x-3 ${isUserRegistered ? 'ltr !hidden sm:!flex' : null}`}>
+                            <ul className={`chip0 cxgjn cutr6 c4mnq cbv5p gap-x-3 ${isUserRegistered ? 'ltr !hidden sm:!flex' : 'ltr'}`}>
                                 {isUserRegistered ? (
                                     <>
+                                        <li className='c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400'>
+                                            <ChevronDown className='w-5 h-5' />
+                                            <Link href='/user-panel/user-tickets'>
+                                                <span>پشتیبانی</span>
+                                            </Link>
+                                        </li>
                                         <li className='c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400'>
                                             <ChevronDown className='w-5 h-5' />
                                             <Link href={user.role === 'USER' ? '/user-panel' : 'admin-panel'}>

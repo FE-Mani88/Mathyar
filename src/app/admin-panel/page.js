@@ -17,7 +17,6 @@ export default async function page() {
         return <SweetAlertModal title='شما اجازه دسترسی به این صفحه را ندارید' icon='error' confirmButtonText='بازگشت به پنل کاربری' redirectURL='user-panel' />
     }
 
-
     const users = await userModel.find({})
     const quizzes = await quizModel.find({})
     const lastUsers = await userModel.find({ role: 'USER' }).sort({ _id: -1 }).limit(3)
@@ -33,7 +32,7 @@ export default async function page() {
 
     return (
         <AdminPanelLayout>
-            <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 rounded-lg bg-indigo-300 py-4 px-4">
                 {stats.map((stat, idx) => (
                     <div key={idx} className="bg-white rounded p-4 shadow">
                         <div className="text-sm text-gray-500">{stat.title}</div>

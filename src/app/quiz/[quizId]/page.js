@@ -6,14 +6,14 @@ import Header from '@/components/modules/Navbar/Navbar'
 import { authUser } from '@/utils/serverheplers'
 
 export default async function page({ params }) {
-    const user = await authUser()
 
     await connectToDB()
 
     const mainQuiz = await quizModel.findOne({ id: params.quizId }).populate('questions').lean()
+    
     return (
         <>
-            <QuizDetails id={mainQuiz.id} imageUrl={mainQuiz.imageUrl} title={mainQuiz.title} description={mainQuiz.description} difficulty={mainQuiz.difficulty} grade={mainQuiz.grade} questions={mainQuiz.questions} duration={mainQuiz.duration} topics={mainQuiz.topics} />
+            <QuizDetails objectID={mainQuiz._id} id={JSON.parse(JSON.stringify(mainQuiz.id))} imageUrl={JSON.parse(JSON.stringify(mainQuiz.imageUrl))} title={JSON.parse(JSON.stringify(mainQuiz.title))} description={JSON.parse(JSON.stringify(mainQuiz.description))} difficulty={JSON.parse(JSON.stringify(mainQuiz.difficulty))} grade={JSON.parse(JSON.stringify(mainQuiz.grade))} questions={JSON.parse(JSON.stringify(mainQuiz.questions))} duration={JSON.parse(JSON.stringify(mainQuiz.duration))} topics={JSON.parse(JSON.stringify(mainQuiz.topics))} />
         </>
     )
 }

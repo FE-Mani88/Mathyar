@@ -2,8 +2,9 @@ import React from 'react'
 import UserPanelLayout from '@/components/layouts/UserPanelLayout/UserPanelLayout'
 import { authUser } from '@/utils/serverheplers'
 import SweetAlertModal from '@/components/modules/SweetAlertModal/SweetAlertModal'
-import { BookOpenText, CheckCircle, Percent, Users } from 'lucide-react'
+import { BookOpenText, CheckCircle, MessageCircleQuestion, NotebookPen, Percent, Users } from 'lucide-react'
 import Link from 'next/link'
+import quizResultModel from '../../../models/QuizResults'
 
 export default async function page() {
     const user = await authUser()
@@ -14,19 +15,36 @@ export default async function page() {
         return <SweetAlertModal title='شما اجازه دسترسی به این صفحه را ندارید' icon='error' confirmButtonText='بازگشت به پنل کاربری' redirectURL='admin-panel' />
     }
 
-    const stats = [
-        { title: "Projects", count: 18, icon: <Users /> },
-        { title: "Active Task", count: 132, icon: <BookOpenText /> },
-        { title: "Teams", count: 12, icon: <CheckCircle /> },
-        { title: "Productivity", count: "76%", icon: <Percent /> },
-    ];
+    // User Datas
+    const userQuizzes = await quizResultModel.find({ user: user._id })
+    const mainQuizzesResults = await quizResultModel.find({ user: user._id }).populate('user quiz')
 
-    const projects = [
-        { name: "Dropbox Design System", hours: 34, priority: "Medium", progress: 15 },
-        { name: "Slack Team UI Design", hours: 47, priority: "High", progress: 35 },
-        { name: "GitHub Satellite", hours: 120, priority: "Low", progress: 75 },
-        { name: "3D Character Modelling", hours: 89, priority: "Medium", progress: 63 },
-        { name: "Webapp Design System", hours: 108, priority: "Track", progress: 100 },
+    // Calculate Average Percentage
+    const calculateUserAveragePercentage = () => {
+        let totalPercentage = 0
+
+        mainQuizzesResults.forEach((quiz) => {
+            totalPercentage = totalPercentage + quiz.correctAnswersPercentage
+        })
+
+        return mainQuizzesResults.length ? (totalPercentage / mainQuizzesResults.length).toFixed(2) : 0
+    }
+
+    const allCorrectAnswersCalc = () => {
+        let allCorrectAnswers = 0
+
+        mainQuizzesResults.forEach((quizResult) => {
+            allCorrectAnswers = allCorrectAnswers + quizResult.correctAnswersNumber
+        })
+
+        return allCorrectAnswers;
+    }
+
+    const stats = [
+        { title: "آزمون های داده شده", count: userQuizzes.length, icon: <NotebookPen /> },
+        { title: "امتیاز شما", count: mainQuizzesResults.length ? (allCorrectAnswersCalc() / userQuizzes.length).toFixed(2) * 100 : 0, icon: <BookOpenText /> },
+        { title: "کل پاسخ های درست شما", count: allCorrectAnswersCalc(), icon: <CheckCircle /> },
+        { title: "میانگین درصد ها", count: `${calculateUserAveragePercentage()}%`, icon: <Percent /> },
     ];
 
 
@@ -37,7 +55,7 @@ export default async function page() {
                     <div className='bg-[#624bff] py-4'>
                         <div className='px-6'>
                             <div className="flex justify-between items-center mb-6">
-                                <h1 className="!text-2xl text-white">آزمون های داده شده</h1>
+                                <h1 className="!text-2xl text-white">آمار کلی شما</h1>
                                 <button className="bg-white !text-black !px-4 !py-2 rounded">
                                     <Link href='/select'>شرکت در آزمون جدید</Link>
                                 </button>
@@ -55,47 +73,53 @@ export default async function page() {
                                             {/* End SVG */}
                                         </div>
                                         <div className="text-2xl font-bold">{stat.count}</div>
-                                        <div className="text-xs text-gray-400">{stat.completed} Completed</div>
+                                        <div className="text-xs text-gray-400">Mathyar</div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white p-4 rounded shadow">
+                    <div className="bg-white p-8 rounded shadow">
                         {/* <h2 className="text-lg font-bold mb-4">Active Projects</h2> */}
                         <div className="grid grid-cols-6 font-semibold text-gray-600 border-b pb-2">
                             <div>نام آزمون</div>
                             <div>مدت زمان</div>
                             <div>درجه سختی</div>
-                            <div>تعداد سوالات</div>
+                            <div>تعداد پاسخ های درست</div>
                             <div>درصد پاسخ های درست</div>
+                            <div>مشاهده کارنامه</div>
                         </div>
-                        {projects.map((proj, i) => (
-                            <div key={i} className="grid grid-cols-6 items-center py-3 border-b text-sm">
-                                <div>{proj.name}</div>
-                                <div>{proj.hours}</div>
+                        {mainQuizzesResults.map((quizResult, index) => (
+                            <div key={index} className="grid grid-cols-6 items-center py-3 border-b text-sm">
+                                <div>{quizResult.quiz.title}</div>
+                                <div>{quizResult.quiz.duration} دقیقه</div>
                                 <div>
-                                    <span className={`px-2 py-1 rounded text-white text-xs ${proj.priority === 'High' ? 'bg-red-500' :
-                                        proj.priority === 'Medium' ? 'bg-yellow-500' :
-                                            proj.priority === 'Low' ? 'bg-blue-500' :
+                                    <span className={`px-2 py-1 rounded text-white text-xs ${quizResult.quiz.difficulty === 'High' ? 'bg-red-500' :
+                                        quizResult.quiz.difficulty === 'medium' ? 'bg-yellow-500' :
+                                            quizResult.quiz.difficulty === 'easy' ? 'bg-blue-500' :
                                                 'bg-green-500'
-                                        }`}>{proj.priority}</span>
+                                        }`}>{quizResult.quiz.difficulty === 'easy' ? 'آسان' : quizResult.quiz.difficulty === 'medium' ? 'متوسط' : 'سخت'}</span>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                    {[...Array(3)].map((_, idx) => (
-                                        <div key={idx} className="w-5 h-5 bg-gray-300 rounded-full"></div>
-                                    ))}
-                                    <span className="text-xs text-gray-500">+5</span>
+                                <div>
+                                    {quizResult.correctAnswersNumber} پاسخ درست
                                 </div>
+
                                 <div className="flex items-center gap-2">
-                                    <span>{proj.progress}%</span>
+                                    <span>{quizResult.correctAnswersPercentage}%</span>
                                     <div className="w-24 bg-gray-200 h-2 rounded">
-                                        <div className="bg-purple-600 h-2 rounded" style={{ width: `${proj.progress}%` }}></div>
+                                        <div className="bg-purple-600 h-2 rounded" style={{ width: `${quizResult.correctAnswersPercentage}%`, backgroundColor: `${quizResult.correctAnswersPercentage >= 80 ? '#4CAF50' : quizResult.correctAnswersPercentage >= 50 ? '#C0CA33' : quizResult.correctAnswersPercentage >= 30 ? '#FF9800' : '#E53935'}` }}></div>
                                     </div>
+                                </div>
+                                {/*  */}
+                                <div className='bg-[#624bff] w-max px-3 text-white rounded-sm !py-1.5'>
+                                    <button>
+                                        مشاهده کارنامه
+                                    </button>
                                 </div>
                             </div>
                         ))}
+
                     </div>
                 </div>
             </UserPanelLayout>

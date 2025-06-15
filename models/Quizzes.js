@@ -43,7 +43,7 @@ const quizSchema = new mongoose.Schema({
         ],
         default: []
     }
-})
+}, { timestamps: true })
 
 const quizModel = mongoose.models.Quiz || mongoose.model('Quiz', quizSchema)
 

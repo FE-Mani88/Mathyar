@@ -21,7 +21,7 @@ const quizResultSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     }
-})
+}, { timestamps: true })
 
 const quizResultModel = mongoose.models.QuizResult || mongoose.model('QuizResult', quizResultSchema)
 

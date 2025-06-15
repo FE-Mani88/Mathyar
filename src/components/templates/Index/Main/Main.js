@@ -144,7 +144,7 @@ export default function Main() {
                         <div className="xl:space-x-18 cbl28 chip0 czcad cuk8q cc36m cq0c0 cckpn cmmfs cy3qu c5l51 c40z8 cbb29">
                             {/* Content */}
                             <div className="cs4o7 mt-6 sm: cm9ng cphra c6ovz aos-init aos-animate" data-aos="zoom-out" data-aos-delay={200}>
-                                <div className="ckxd8 cohxx">
+                                <div data-aos='zoom-out' className="ckxd8 cohxx">
                                     <h3 className="ci6dt cvx4v cejd3 c6shg rtl text-start !text-xl text-center flex justify-center sm:!text-4xl !text-gray-900 dark:!text-white">برخی مزایای استفاده از این پلتفرم:</h3>
                                     <p className="ciljg cbqc4 ckdyj !flex rtl !text-center sm:!text-start !text-gray-600 dark:!text-gray-400">
                                         mathyar، یک پلتفرم آموزشی ریاضی به صورت آزمون محور است که در ادامه به برخی از مزایای آن اشاره شده است:
@@ -176,7 +176,7 @@ export default function Main() {
                             </div>
                             {/* Image */}
                             <div className="ciy0g c6ovz aos-init aos-animate" data-aos="zoom-out">
-                                <img className="cbl28 cckpn" src="./images/testLogo.png" width={540} height={581} alt="Features" />
+                                <img data-aos='zoom-out' className="cbl28 cckpn" src="./images/testLogo.png" width={540} height={581} alt="Features" />
                             </div>
                         </div>
                     </div>

@@ -32,7 +32,7 @@ function Login() {
                 },
                 body: JSON.stringify(userDetails)
             })
-            
+
             const data = await res.json()
 
             if (res.ok) {
@@ -61,8 +61,9 @@ function Login() {
         <>
             <div className="cnplf min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-6 overflow-x-hidden overflow-y-hidden">
                 <div className="c5sfa c307p c1sv4 cavhb cnmzr !hidden md:!flex" aria-hidden="true">
-                    <img src="https://preview.cruip.com/neon/images/hero-illustration.svg" className="cy2lr" width={2143} height={737} alt="Hero Illustration" />
+                    <img src="https://preview.cruip.com/neon/images/hero-illustration.svg" className="cy2lr" width={2143} height={737} alt="Hero Illustration" style={{ maxHeight: '100vh', objectFit: 'cover' }} />
                 </div>
+                {/*  */}
                 <div className="max-w-md w-full bg-gray-800/80 backdrop-blur-xl rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] p-8 space-y-7 border border-gray-700/50 relative overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
 
@@ -128,16 +129,25 @@ function Login() {
                                 ثبت نام کنید
                             </Link>
                         </p>
+                        <div className="relative flex justify-center !text-sm mt-2">
+                            <span className="!px-3 !bg-gray-800/80 !text-gray-400 rtl">
+                                و یا بازگردید با: <Link className='!text-blue-500' href='/'>صفحه اصلی</Link>
+                            </span>
+                        </div>
                     </div>
+
+
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-700/50"></div>
                         </div>
+
                         <div className="relative flex justify-center !text-sm">
                             <span className="!px-3 !bg-gray-800/80 !text-gray-400 rtl">
                                 و یا ادامه دهید با:
                             </span>
+
                         </div>
                     </div>
 
@@ -167,7 +177,7 @@ function Login() {
                 </div>
             </div>
 
-            <ToastContainer />
+            {/* <ToastContainer /> */}
         </>
     );
 }

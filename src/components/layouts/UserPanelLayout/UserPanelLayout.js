@@ -16,6 +16,8 @@ import {
   Loader2,
   Menu,
   Search,
+  Send,
+  SendIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
@@ -29,7 +31,7 @@ export default function UserPanelLayout({ children }) {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const userRes = await fetch('/api/user');
+        const userRes = await fetch('/api/auth/getme');
         const userData = await userRes.json();
         setUser(userData);
       } catch (error) {
@@ -81,6 +83,46 @@ export default function UserPanelLayout({ children }) {
     })
   }
 
+
+  // POP-UP
+
+  const popUpHandler = () => {
+    if (window.innerWidth >= 640) {
+      Swal.fire({
+        position: 'top-start',
+        width: '320px',
+        showConfirmButton: false,
+        padding: '0 !important',
+        customClass: {
+          popup: 'my-swal-popup',
+        },
+
+        html: `
+      <div dir='rtl' style="width: 278px !important; background: white !important; padding: 20px 20px 14px 20px !important; border-radius: 12px !important; text-align: right !important;">
+        <div style="display: flex !important; align-items: center !important; border-bottom: 1px solid #e5e5e5 !important; padding-bottom: 20px !important; margin-bottom: 10px !important;">
+          
+            <div class='bg-[#624bff] text-white w-[56px] h-[56px] border-none select-none focus:outline-none outline -none rounded-full flex justify-center items-center'>
+            ${user.username ? user.username[0].toUpperCase() : '...'}
+            </div>
+
+          <div style="margin-right: 14px !important; display: flex !important; flex-direction: column !important; gap: 12px !important; overflow: hidden !important;">
+            <span style="font-weight: bold !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">${user.username ? user.username : 'در حال لود...'}</span>
+            <span style="font-size: 0.875rem !important; font-weight: 500 !important; color:rgb(26, 26, 43) !important;">
+              ${user.email ? user.email : 'در حال لود...'}
+            </span>
+          </div>
+        </div>
+
+        <div style='font-size: 16px !important'>
+        شماره تلفن: ${user.phoneNumber ? user.phoneNumber : 'در حال لود...'}
+        </div>        
+      </div>
+    `
+      });
+    }
+  };
+
+
   return (
     <div dir="rtl" className="min-h-screen bg-[#E6EDFF]">
       {isSidebarOpen && (
@@ -111,6 +153,7 @@ export default function UserPanelLayout({ children }) {
               <input
                 type="text"
                 placeholder="جستجو..."
+                style={{borderRadius: '0 6px 6px 0'}}
                 className="pl-4 pr-10 py-2 w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm bg-white placeholder-gray-400 text-right transition-all"
               />
               <div className="w-12 rounded-l-xl inset-y-0 left-0 flex justify-center items-center cursor-pointer text-white bg-[#2C2F3B] transition-all hover:bg-gray-900">
@@ -120,7 +163,7 @@ export default function UserPanelLayout({ children }) {
             {/* End Search Box */}
 
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+              <div onClick={popUpHandler} className="select-none w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
                 {user.username ? (
                   user.username.trim()[0].toUpperCase()
                 ) : (
@@ -141,11 +184,12 @@ export default function UserPanelLayout({ children }) {
 
       {/* Sidebar */}
       <div
-        className={`fixed flex flex-col justify-between right-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-[#2C2F3B] text-white transform transition-transform duration-300 z-50 ${isSidebarOpen
+        className={`select-none fixed flex flex-col justify-between right-0 top-14 w-64 h-[calc(100vh-3.5rem)] bg-[#2C2F3B] text-white transform transition-transform duration-300 z-50 ${isSidebarOpen
           ? 'translate-x-0'
           : '!translate-x-full md:!translate-x-0 md:translate-x-0'
           }`}
       >
+
         <div className="p-6">
           <div
             className={`text-xs uppercase tracking-wider text-gray-400 mb-2 ${!user.username ? 'animate-pulse' : ''
@@ -169,7 +213,6 @@ export default function UserPanelLayout({ children }) {
                   }`}
               />
             </div>
-
             <div
               className={`pl-2 overflow-hidden transition-all duration-300 ${openSection === 'integrations'
                 ? 'max-h-40 opacity-100'
@@ -208,6 +251,16 @@ export default function UserPanelLayout({ children }) {
               </Link>
             </div>
 
+            <Link
+              href="/user-panel"
+              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+            >
+              <House className="h-4 w-4 ml-3" />
+              <span>داشبورد</span>
+            </Link>
+
+
+
             <a
               href="#"
               className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
@@ -222,13 +275,20 @@ export default function UserPanelLayout({ children }) {
               <Heart className="h-4 w-4 ml-3" />
               <span>علاقه مندی ها</span>
             </a>
-            <a
-              href="#"
+            <Link
+              href="/user-panel/user-tickets"
               className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
             >
               <Mail className="h-4 w-4 ml-3" />
               <span>تیکت ها</span>
-            </a>
+            </Link>
+            <Link
+              href="/user-panel/send-ticket"
+              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+            >
+              <SendIcon className="h-4 w-4 ml-3" />
+              <span>ارسال تیکت</span>
+            </Link>
             <a
               href="#"
               className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"

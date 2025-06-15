@@ -1,10 +1,15 @@
-import { authUser } from "@/utils/serverheplers";
 import quizResultModel from "../../../../models/QuizResults";
+import { authUser } from "@/utils/serverheplers";
 
 export async function GET() {
     const user = await authUser()
 
-    return Response.json(user)
+    if (!user) {
+        return Response.json({ message: 'User Is Not Authourized' }, { status: 401 })
+    }
+
+    const quizzesResults = await quizResultModel.find({}).populate('user quiz')
+    return Response.json(quizzesResults)
 }
 
 

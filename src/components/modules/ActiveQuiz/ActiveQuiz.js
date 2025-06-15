@@ -4,7 +4,7 @@ import { QuizProgress } from '../QuizProgress/QuizProgress';
 import { QuizQuestion } from '../QuizQuestion/QuizQuestion';
 import { QuizResults } from '../QuizResults/QuizResults';
 
-export function ActiveQuiz({ id, questions, duration, title }) {
+export function ActiveQuiz({ objectID, id, questions, duration, title }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [timeLeft, setTimeLeft] = useState(duration * 60);
@@ -17,7 +17,7 @@ export function ActiveQuiz({ id, questions, duration, title }) {
       }, 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0 && !isFinished) {
-      finishQuiz();
+      finishQuiz(answers);
     }
   }, [timeLeft, isFinished]);
 
@@ -29,21 +29,39 @@ export function ActiveQuiz({ id, questions, duration, title }) {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      finishQuiz();
+      finishQuiz(newAnswers);
     }
   };
 
-  
-  const calculateScore = () => {
-    return answers.reduce((score, answer, index) => {
-      // console.log('Answer =>', answer, 'Score =>', score)
+  const calculateScore = (finalAnswers) => {
+    return finalAnswers.reduce((score, answer, index) => {
       return answer === questions[index].correctAnswer ? score + 1 : score;
     }, 0);
   };
-  
-  const finishQuiz = async () => {
 
+  const finishQuiz = async (finalAnswers = answers) => {
     setIsFinished(true);
+
+    const correctAnswersNumber = calculateScore(finalAnswers);
+    const correctAnswersPercentage = (correctAnswersNumber / questions.length) * 100;
+
+    try {
+      const res = await fetch('/api/quizzesResults', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quiz: objectID,
+          correctAnswersPercentage,
+          correctAnswersNumber,
+        }),
+      });
+
+      if (!res.ok) {
+        console.error('Failed to save result');
+      }
+    } catch (error) {
+      console.error('Error sending result:', error);
+    }
   };
 
   const handleRetry = () => {
@@ -56,7 +74,7 @@ export function ActiveQuiz({ id, questions, duration, title }) {
   if (isFinished) {
     return (
       <QuizResults
-        score={calculateScore()}
+        score={calculateScore(answers)} // استفاده از answers فعلی
         totalQuestions={questions.length}
         answers={answers}
         questions={questions}
@@ -68,23 +86,20 @@ export function ActiveQuiz({ id, questions, duration, title }) {
   }
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-50 py-12 px-4 dark:bg-[#121a29] transition-all">
-        <div className="max-w-3xl mx-auto">
-          <QuizProgress
-            currentQuestion={currentQuestion + 1}
-            totalQuestions={questions.length}
-            timeLeft={timeLeft}
-          />
+    <div className="min-h-screen bg-gray-50 py-12 px-4 dark:bg-[#121a29] transition-all">
+      <div className="max-w-3xl mx-auto">
+        <QuizProgress
+          currentQuestion={currentQuestion + 1}
+          totalQuestions={questions.length}
+          timeLeft={timeLeft}
+        />
 
-          <QuizQuestion
-            question={questions[currentQuestion]}
-            selectedAnswer={answers[currentQuestion]}
-            onAnswerSelect={handleAnswerSelect}
-          />
-        </div>
+        <QuizQuestion
+          question={questions[currentQuestion]}
+          selectedAnswer={answers[currentQuestion]}
+          onAnswerSelect={handleAnswerSelect}
+        />
       </div>
-      {/* <Footer /> */}
-    </>
+    </div>
   );
 }

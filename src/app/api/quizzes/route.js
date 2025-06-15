@@ -17,10 +17,10 @@ export const GET = async () => {
 export const POST = async (req) => {
     const requestBody = await req.json()
 
-    const { title, imageUrl, description, grade, duration, topics, difficulty } = requestBody
+    const {id, title, imageUrl, description, grade, duration, topics, difficulty } = requestBody
 
     await quizModel.create({
-        title, imageUrl, description, grade, duration, topics, difficulty
+        id, title, imageUrl, description, grade, duration, topics, difficulty
     })
 
     return Response.json({ message: 'Quiz Added Successfully :)' }, { status: 201 })

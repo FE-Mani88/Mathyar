@@ -4,9 +4,12 @@ import Navbar from '@/components/modules/Navbar/Navbar'
 import QuizCard from '@/components/modules/QuizCard/QuizCard';
 import Footer from '@/components/templates/Index/Footer/Footer';
 import { GraduationCap } from 'lucide-react'
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Swal from 'sweetalert2';
 
 export default function Select() {
+  const router = useRouter()
 
   const [user, setUser] = useState(undefined)
   const [selectedGrade, setSelectedGrade] = useState(null);
@@ -17,6 +20,7 @@ export default function Select() {
       const res = await fetch('/api/auth/getme', {
         cache: 'no-store'
       })
+
       const data = await res.json()
 
       if (res.ok) {
@@ -50,16 +54,38 @@ export default function Select() {
   }) : quizzes
 
   if (user === undefined || quizzes === null) {
+
+    // setTimeout(() => {
+    //   if (user === undefined || quizzes === null) {
+    //     console.log(user)
+    //     Swal.fire({
+    //       icon: 'warning',
+    //       title: 'مشکل غیر منتظره ای پیش اومد! لطفا بعدا امتحان کن',
+    //       confirmButtonText: 'باشه'
+    //     }).then(() => {
+    //       router.replace('/')
+    //     })
+    //   }
+    // }, 15000)
+
     return (
-      <div className={`loading-container h-[100vh] flex justify-center items-center ${true ? 'loading' : ''}`}>
-        <div className="loader"></div>
-      </div>
+      <>
+        <div className="c5sfa c307p c1sv4 cavhb cnmzr" aria-hidden="true">
+          <img src="https://preview.cruip.com/neon/images/hero-illustration.svg" className="cy2lr" width={2143} height={737} alt="Hero Illustration" style={{ maxHeight: '100vh', objectFit: 'cover', opacity: 0.7 }} />
+        </div>
+        <div className={`loading-container bg-[#1a2331] h-[100vh] flex justify-center items-center ${true ? 'loading' : ''}`}>
+          <div className="loader"></div>
+        </div>
+      </>
     )
   }
 
   if (user === false) {
     return (
       <div className="min-h-screen bg-[#111827] flex items-center justify-center p-4">
+        <div className="c5sfa c307p c1sv4 cavhb cnmzr" aria-hidden="true">
+                    <img src="https://preview.cruip.com/neon/images/hero-illustration.svg" className="cy2lr" width={2143} height={737} alt="Hero Illustration" style={{ maxHeight: '100vh', objectFit: 'cover', opacity: 0.7 }} />
+                </div>
         <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl max-w-md w-full transform hover:scale-105 transition-transform duration-300 py-10">
           <div className="!space-y-6 text-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">

@@ -36,9 +36,7 @@
   body::-webkit-scrollbar-thumb {
     background: var(--sb-thumb-color);
     border-radius: 3px;
-
   }
-
 
   @supports not selector(::-webkit-scrollbar) {
     body {
@@ -2531,4 +2529,15 @@ input:focus {
 
 .swal-button {
   width: 100%;
+}
+
+
+.my-swal-popup {
+  max-width: 330px;
+  margin-top: 40px;
+  margin-left: 40px;
+}
+
+#swal2-html-container {
+  overflow: hidden;
 }

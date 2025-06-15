@@ -1,10 +1,22 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import ThemeToggle from "@/components/modules/ThemeToggle/ThemeToggle";
 
 const Error10 = () => {
   const [isDark, setIsDark] = useState(null)
+  
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark')
+      document.cookie = "theme=dark; path=/; max-age=31536000" // 1 سال
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light')
+      document.cookie = "theme=light; path=/; max-age=31536000" // 1 سال
+    }
+  }, [isDark]);
 
   return (
     <div className="flex items-center flex-col justify-center lg:flex-row py-28 px-6 md:px-24 md:py-20 lg:py-32 gap-16 lg:gap-28">

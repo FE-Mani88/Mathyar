@@ -5,14 +5,14 @@ import { DIFFICULTY_COLORS } from '@/utils/constants'
 import { Clock, BookOpen, GraduationCap, BarChart, List } from 'lucide-react'
 import { ActiveQuiz } from '@/components/modules/ActiveQuiz/ActiveQuiz'
 
-export default function QuizDetailsTemplate({ id, questions, imageUrl, title, difficulty, topics, grade, description, duration }) {
+export default function QuizDetailsTemplate({ objectID,  id, questions, imageUrl, title, difficulty, topics, grade, description, duration }) {
 
     const [isQuizStarted, setIsQuizStarted] = useState(null)
 
     if (isQuizStarted) {
         const shuffled = [...questions].sort(() => 0.5 - Math.random())
         const randomQuestions = shuffled.slice(0, 5)
-        return <ActiveQuiz questions={randomQuestions} duration={duration} title={title} id={id} />
+        return <ActiveQuiz objectID={objectID} questions={randomQuestions} duration={duration} title={title} id={id} />
     }
 
     return (
