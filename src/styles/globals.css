@@ -2541,3 +2541,7 @@ input:focus {
 #swal2-html-container {
   overflow: hidden;
 }
+
+.Toastify__toast {
+  justify-content: space-around;
+}

@@ -7,14 +7,32 @@ import {
     Percent
 } from 'lucide-react'
 import Link from 'next/link'
+import { authUser } from '@/utils/serverheplers'
+import ticketModel from '../../../../models/Tickets'
+import { redirect } from 'next/navigation'
+import SweetAlertModal from '@/components/modules/SweetAlertModal/SweetAlertModal'
 
-export default function page() {
+export default async function page() {
+
+    const user = await authUser()
+
+    if (!user) {
+        return <SweetAlertModal title='زمان ورود شما منقضی شده است' icon='success' confirmButtonText='بازگشت به ورود' redirectURL='/login' />
+    }
+
+    const userTickets = await ticketModel.find({ userId: user._id })
+    const userClosedTickets = await ticketModel.find({ userId: user._id, status: 'closed' })
+    const userOpenTickets = await ticketModel.find({ userId: user._id, replies: { $exists: true, $size: 0 } })
+    const answeredTickets = await ticketModel.find({
+        userId: user._id,
+        replies: { $exists: true, $not: { $size: 0 } }
+    });
 
     const stats = [
-        { title: "همه تیکت ها", count: 18, icon: <NotebookPen /> },
-        { title: "تیکت های پاسخ داده شده", count: 14, icon: <BookOpenText /> },
-        { title: "تیکت های در انتظار پاسخ", count: 12, icon: <CheckCircle /> },
-        { title: "تیکت های بسته شده", count: `${30}%`, icon: <Percent /> },
+        { title: "همه تیکت های شما", count: userTickets.length, icon: <NotebookPen /> },
+        { title: "تیکت های پاسخ داده شده", count: answeredTickets.length, icon: <BookOpenText /> },
+        { title: "تیکت های در انتظار پاسخ", count: userOpenTickets.length, icon: <CheckCircle /> },
+        { title: "تیکت های بسته شده", count: userClosedTickets.length, icon: <Percent /> },
     ];
 
     return (
@@ -56,8 +74,29 @@ export default function page() {
                         <div>فرستنده تیکت</div>
                         <div>وضعیت تیکت</div>
                     </div>
-
-
+                    <div className="divide-y text-center">
+                        {userTickets.map((ticket) => (
+                            <div key={ticket._id} className="grid grid-cols-4 py-4 items-center">
+                                <div>{ticket.subject}</div>
+                                <div>{new Date(ticket.createdAt).toLocaleDateString('fa-IR')}</div>
+                                <div>{user.phoneNumber}</div>
+                                <div className="flex items-center justify-center gap-3">
+                                    <span
+                                        className={`select-none px-2 py-1 rounded-full min-w-10 text-xs ${ticket.status === "closed" ? "bg-red-100 text-red-600" : "bg-green-100 text-green-700"
+                                            }`}
+                                    >
+                                        {ticket.status === "closed" ? "بسته شده" : "باز"}
+                                    </span>
+                                    <Link
+                                        href={`/user-panel/tickets/${ticket._id}`}
+                                        className="!text-indigo-600 hover:!underline !text-xs bg-indigo-100 rounded-sm !py-1 !px-1"
+                                    >
+                                        مشاهده
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </UserPanelLayout>

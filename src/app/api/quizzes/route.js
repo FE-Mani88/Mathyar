@@ -5,7 +5,7 @@ export const GET = async () => {
     await connectToDB()
 
     try {
-        const quizzes = await quizModel.find({})
+        const quizzes = await quizModel.find({}).populate('questions')
 
         return Response.json(quizzes, { status: 200 })
     } catch (error) {

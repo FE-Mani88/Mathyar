@@ -32,7 +32,7 @@ export default async function page() {
 
     return (
         <AdminPanelLayout>
-            <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 rounded-lg bg-indigo-300 py-4 px-4">
+            <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8 rounded-lg bg-indigo-300 py-4 px-4 max-w-5xl mx-auto">
                 {stats.map((stat, idx) => (
                     <div key={idx} className="bg-white rounded p-4 shadow">
                         <div className="text-sm text-gray-500">{stat.title}</div>

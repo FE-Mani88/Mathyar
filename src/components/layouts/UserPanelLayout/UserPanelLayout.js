@@ -18,21 +18,37 @@ import {
   Search,
   Send,
   SendIcon,
+  Cpu,
+  CupSoda,
+  Medal,
 } from 'lucide-react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
-import { redirect } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 
 export default function UserPanelLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [user, setUser] = useState({});
   const [openSection, setOpenSection] = useState(null);
 
+  const router = useRouter()
+  const pathname = usePathname()
+
   useEffect(() => {
     const getUser = async () => {
       try {
         const userRes = await fetch('/api/auth/getme');
         const userData = await userRes.json();
+        if (!userRes.ok || userData.role !== 'USER') {
+          Swal.fire({
+            icon: 'error',
+            title: 'شما دسترسی به این صفحه را ندارید',
+            confirmButtonText: 'فهمیدم'
+          }).then(() => {
+            return router.replace('/admin-panel')
+          })
+        }
+        console.log(userData)
         setUser(userData);
       } catch (error) {
         console.error('خطا در دریافت اطلاعات کاربر:', error);
@@ -98,10 +114,10 @@ export default function UserPanelLayout({ children }) {
         },
 
         html: `
-      <div dir='rtl' style="width: 278px !important; background: white !important; padding: 20px 20px 14px 20px !important; border-radius: 12px !important; text-align: right !important;">
+      <div dir='rtl' style="background: white !important; padding: 20px 20px 14px 20px !important; border-radius: 12px !important; text-align: right !important;">
         <div style="display: flex !important; align-items: center !important; border-bottom: 1px solid #e5e5e5 !important; padding-bottom: 20px !important; margin-bottom: 10px !important;">
           
-            <div class='bg-[#624bff] text-white w-[56px] h-[56px] border-none select-none focus:outline-none outline -none rounded-full flex justify-center items-center'>
+            <div class='bg-[#624bff] text-white min-w-[56px] min-h-[56px] border-none select-none focus:outline-none outline -none rounded-full flex justify-center items-center'>
             ${user.username ? user.username[0].toUpperCase() : '...'}
             </div>
 
@@ -153,7 +169,7 @@ export default function UserPanelLayout({ children }) {
               <input
                 type="text"
                 placeholder="جستجو..."
-                style={{borderRadius: '0 6px 6px 0'}}
+                style={{ borderRadius: '0 6px 6px 0' }}
                 className="pl-4 pr-10 py-2 w-full rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm bg-white placeholder-gray-400 text-right transition-all"
               />
               <div className="w-12 rounded-l-xl inset-y-0 left-0 flex justify-center items-center cursor-pointer text-white bg-[#2C2F3B] transition-all hover:bg-gray-900">
@@ -253,38 +269,36 @@ export default function UserPanelLayout({ children }) {
 
             <Link
               href="/user-panel"
-              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+              className={`flex items-center text-blue-400 hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors ${pathname === '/user-panel' ? '!text-blue-400 bg-[#363B4D]' : ''}`}
             >
               <House className="h-4 w-4 ml-3" />
               <span>داشبورد</span>
             </Link>
 
-
-
-            <a
-              href="#"
-              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
-            >
+            <Link
+              href="/user-panel/given-quizzes"
+              className={`flex items-center text-blue-400 hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors ${pathname === '/user-panel/given-quizzes' ? '!text-blue-400 bg-[#363B4D]' : ''}`}
+              >
               <NotebookPen className="h-4 w-4 ml-3" />
               <span>آزمون های داده شده</span>
-            </a>
-            <a
-              href="#"
-              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+            </Link>
+            <Link
+              href="/user-panel/best-players"
+              className={`flex items-center text-blue-400 hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors ${pathname === '/user-panel/best-players' ? '!text-blue-400 bg-[#363B4D]' : ''}`}
             >
-              <Heart className="h-4 w-4 ml-3" />
-              <span>علاقه مندی ها</span>
-            </a>
+              <Medal className="h-4 w-4 ml-3" />
+              <span>بازیکنان برتر</span>
+            </Link>
             <Link
               href="/user-panel/user-tickets"
-              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+              className={`flex items-center text-blue-400 hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors ${pathname === '/user-panel/user-tickets' ? '!text-blue-400 bg-[#363B4D]' : ''}`}
             >
               <Mail className="h-4 w-4 ml-3" />
               <span>تیکت ها</span>
             </Link>
             <Link
               href="/user-panel/send-ticket"
-              className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
+              className={`flex items-center text-blue-400 hover:bg-[#363B4D] px-3 py-2 rounded-lg transition-colors ${pathname === '/user-panel/send-ticket' ? '!text-blue-400 bg-[#363B4D]' : ''}`}
             >
               <SendIcon className="h-4 w-4 ml-3" />
               <span>ارسال تیکت</span>
@@ -301,7 +315,7 @@ export default function UserPanelLayout({ children }) {
               className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors"
             >
               <Settings2 className="h-4 w-4 ml-3" />
-              <span>تنظیمات</span>
+              <span>تنظیمات حساب</span>
             </a>
           </nav>
         </div>

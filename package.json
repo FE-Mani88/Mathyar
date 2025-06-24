@@ -17,6 +17,8 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.511.0",
+    "moment": "^2.30.1",
+    "moment-jalaali": "^0.10.4",
     "mongoose": "^8.15.0",
     "next": "15.3.2",
     "npm": "^11.4.1",

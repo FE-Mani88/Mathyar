@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import { Users, Trash2, Search } from 'lucide-react'
 import Swal from 'sweetalert2'
+import { useRouter } from 'next/navigation'
 
 export default function AllUsers({ users }) {
     const [visibleCount, setVisibleCount] = useState(5)
     const [user, setUser] = useState(null)
+
+    const router = useRouter()
 
     useEffect(() => {
         const getUser = async () => {
@@ -28,7 +31,7 @@ export default function AllUsers({ users }) {
 
     const visibleUsers = users.slice(0, visibleCount)
 
-    const removeUserHandler = () => {
+    const removeUserHandler = (mainUserId) => {
         Swal.fire({
             title: 'آیا از حذف این کاربر اطمینان دارید؟',
             showDenyButton: true,
@@ -40,7 +43,7 @@ export default function AllUsers({ users }) {
         }).then(async (result) => {
             if (result.isDenied) {
                 try {
-                    const res = await fetch(`/api/users/${user._id}`, {
+                    const res = await fetch(`/api/users/${mainUserId}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -52,10 +55,12 @@ export default function AllUsers({ users }) {
                             title: '(: کاربر حذف شد ',
                             icon: 'success',
                             confirmButtonText: 'متوجه شدم',
+                        }).then(() => {
+                            router.refresh()
                         })
                     }
                 } catch (error) {
-
+                    console.error('Error => ', error)
                 }
             } else {
                 Swal.fire({
@@ -114,7 +119,7 @@ export default function AllUsers({ users }) {
                                     >
                                         <td className="py-3 px-4 text-right flex gap-4 justify-end items-center">
                                             <button
-                                                onClick={removeUserHandler}
+                                                onClick={() => { removeUserHandler(user._id) }}
                                                 className="!text-white transition flex !bg-red-600 hover:!bg-red-700 !px-1.5 !py-[2px] rounded-lg"
                                             >
                                                 <Trash2 className="w-5 h-5" />
@@ -143,7 +148,7 @@ export default function AllUsers({ users }) {
                         </div>
                     )}
 
-                    {visibleCount >= users.length && (
+                    {visibleCount > users.length && (
                         <div className="text-center mt-6">
                             <button
                                 onClick={handleLoadLess}

@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import MotionDiv from '@/utils/MotionDiv'
 import MotionButton from "@/utils/MotionButton";
 import UserPanelLayout from "@/components/layouts/UserPanelLayout/UserPanelLayout";
+import Swal from "sweetalert2";
+import { redirect } from "next/navigation";
 
 export default function TicketForm() {
 
@@ -11,14 +13,29 @@ export default function TicketForm() {
     body: ''
   })
 
-  const ticketSubmitHandler = async () => {
-    const res = await fetch('/api/ticket', {
+  const ticketSubmitHandler = async (event) => {
+    event.preventDefault()
+    const res = await fetch('/api/tickets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
     })
+
+    if (res.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'تیکت با موفقیت ارسال شد',
+        confirmButtonText: 'فهمیدم'
+      }).then(() => {
+        setFormData({
+          subject: '',
+          body: ''
+        })
+        redirect('/user-panel/user-tickets')
+      })
+    }
   }
 
   return (
@@ -31,7 +48,7 @@ export default function TicketForm() {
       >
         <h2 className="text-3xl font-bold text-gray-800 text-center">ارسال تیکت به پشتیبانی</h2>
 
-        <form className="space-y-6">
+        <form className="!space-y-6">
 
           {/* Subject */}
           <div>
@@ -62,6 +79,7 @@ export default function TicketForm() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             type="submit"
+            onClick={ticketSubmitHandler}
             className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 !text-white !py-3 !rounded-xl !shadow-md hover:!shadow-lg transition-all"
           >
             ارسال تیکت

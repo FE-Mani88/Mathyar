@@ -15,12 +15,21 @@ import {
   FolderGit2,
   Settings2,
   LogOut,
+  Notebook,
+  NotebookPenIcon,
+  FileQuestion,
+  Mail,
+  PenBoxIcon,
+  BookIcon,
+  Book,
+  Newspaper,
 } from "lucide-react";
 import Swal from "sweetalert2";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { QueueListIcon } from "@heroicons/react/24/outline";
 
 export default function AdminPanelLayout({ children }) {
 
@@ -91,9 +100,16 @@ export default function AdminPanelLayout({ children }) {
   }
 
   if (user === undefined) {
-    <div className={`loading-container bg-[#1a2331] h-[100vh] flex justify-center items-center ${true ? 'loading' : ''}`}>
-      <div className="loader"></div>
-    </div>
+    return (
+      <>
+        <div className={`loading-container !bg-[#1a2331] h-[100vh] flex justify-center items-center ${true ? 'loading' : ''}`}>
+          <div className="c5sfa c307p c1sv4 cavhb cnmzr" aria-hidden="true">
+            <img src="https://preview.cruip.com/neon/images/hero-illustration.svg" className="cy2lr" width={2143} height={737} alt="Hero Illustration" />
+          </div>
+          <div className="loader"></div>
+        </div>
+      </>
+    )
   } else if (user.role !== 'ADMIN') {
     Swal.fire({
       icon: 'error',
@@ -164,21 +180,29 @@ export default function AdminPanelLayout({ children }) {
                 <span>داشبورد</span>
               </Link>
               <Link href="/admin-panel/add-quiz" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/add-quiz' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
-                <CreditCard className="h-4 w-4 ml-3" />
+                <NotebookPenIcon className="h-4 w-4 ml-3" />
                 <span>افزودن آزمون</span>
               </Link>
               <Link href="/admin-panel/add-question" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/add-question' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
-                <FolderGit2 className="h-4 w-4 ml-3" />
+                <FileQuestion className="h-4 w-4 ml-3" />
                 <span>افزودن سوال</span>
               </Link>
               <Link href="/admin-panel/members" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/members' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
                 <Users2 className="h-4 w-4 ml-3" />
                 <span>اعضا</span>
               </Link>
-              <a href="#" className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors">
-                <CreditCard className="h-4 w-4 ml-3" />
+              <Link href="/admin-panel/tickets" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/tickets' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
+                <Mail className="h-4 w-4 ml-3" />
                 <span>تیکت ها</span>
-              </a>
+              </Link>
+              <Link href="/admin-panel/quizzes" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/quizzes' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
+                <Newspaper className="h-4 w-4 ml-3" />
+                <span>آزمون ها</span>
+              </Link>
+              <Link href="/admin-panel/questions" className={`flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors ${pathname === '/admin-panel/questions' ? '!text-blue-400 bg-[#363B4D]' : ''}`}>
+                <QueueListIcon className="h-4 w-4 ml-3" />
+                <span>سوالات</span>
+              </Link>
               <a href="#" className="flex items-center text-gray-400 hover:bg-[#363B4D] hover:text-white px-3 py-2 rounded-lg transition-colors">
                 <Settings2 className="h-4 w-4 ml-3" />
                 <span>تنظیمات</span>
@@ -198,8 +222,8 @@ export default function AdminPanelLayout({ children }) {
         </div>
 
         {/* Main Content */}
-        <main className={`pt-14 transition-all duration-300 ${isSidebarOpen ? 'md:mr-64' : 'mr-0 md:mr-64'} p-8`}>
-          <div className="max-w-5xl mx-auto">
+        <main className={`pt-14 transition-all duration-300 ${isSidebarOpen ? 'md:mr-64' : 'mr-0 md:mr-64'}`}>
+          <div className="mx-auto">
             {children}
           </div>
         </main>

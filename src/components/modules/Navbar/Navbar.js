@@ -27,22 +27,22 @@ export default function Header({ isUserRegistered, user }) {
                 <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
                 <div className={`cbl28 c0g2c coaq6 cb0ik items-center flex rtl !justify-between flex-row ${isUserRegistered ? ' flex justify-end items-center flex-row-reverse' : 'sm:![direction:ltr]'}`}>
                     {/* Start Search Box */}
-                    <div className={`flex ltr relative left-[40px] sm:left-0 mr-[40px] h-[30px] sm:h-[50px] items-center ${!isUserRegistered ? '!hidden md:!flex' : null} `}>
-                        <div className='h-full bg-white text-black p-1 rounded-l-[30%] h-[100%] w-10 flex justify-center items-center hover:!bg-gray-300 transition-all cursor-pointer'>
+                    <div className={`flex ltr relative left-[40px] sm:left-0 mr-[40px] h-[35px] sm:h-[50px] items-center ${!isUserRegistered ? '!hidden md:!flex' : null} `}>
+                        <div className='h-full bg-white text-black p-1 rounded-l-[20%] sm:rounded-l-[30%] h-[100%] w-10 flex justify-center items-center hover:!bg-gray-300 transition-all cursor-pointer'>
                             <Search />
                         </div>
-                        <input style={{ padding: '8px', height: '100%', border: 'solid white 1px' }} className='rtl w-40 sm:w-60 rounded-r-lg' placeholder='به دنبال چه می گردید؟ سرچ کنید' />
+                        <input style={{ padding: '8px', height: '100%', border: 'solid white 1px' }} className='rtl w-40 sm:w-60 rounded-r-md sm:rounded-r-lg' placeholder='به دنبال چه می گردید؟ سرچ کنید' />
                     </div>
                     {/* End Search Box */}
-                    <div className={`chip0 cglp6 c4mnq cd10w cdoit  sm:mx-0 flex ${isUserRegistered ? ' flex justify-between gap-[800px]' : ''}`}>
+                    <div className={`chip0 cglp6 c4mnq cd10w cdoit sm:mx-0 flex ${isUserRegistered ? ' flex justify-between gap-[800px]' : ''}`}>
 
                         <nav className="chip0 cxgjn flex items-center">
                             <ul className={`chip0 cxgjn cutr6 c4mnq cbv5p gap-x-3 ${isUserRegistered ? 'ltr !hidden sm:!flex' : 'ltr'}`}>
                                 {isUserRegistered ? (
                                     <>
-                                        <li className='c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400'>
+                                        <li className={`c8h5l text-lg border-bottom-1 text-black dark:text-gray-200 flex items-center cursor-pointer !transition-all duration-150 hover:text-gray-400 ${user.role === 'ADMIN' ? '!hidden' : ''}`}>
                                             <ChevronDown className='w-5 h-5' />
-                                            <Link href='/user-panel/user-tickets'>
+                                            <Link href={`/user-panel/user-tickets`}>
                                                 <span>پشتیبانی</span>
                                             </Link>
                                         </li>

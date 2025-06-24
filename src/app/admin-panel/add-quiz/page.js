@@ -48,7 +48,8 @@ export default function AddQuizForm() {
         if (res.ok) {
             Swal.fire({
                 icon: 'success',
-                title: 'کوییز با موفقیت اضافه شد :)'
+                title: '(: کوییز با موفقیت اضافه شد ',
+                confirmButtonText: 'فهمیدم'
             })
         }
 
@@ -58,7 +59,7 @@ export default function AddQuizForm() {
 
     return (
         <AdminPanelLayout>
-            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 space-y-6 mt-8">
+            <form onSubmit={handleSubmit} className="mx-auto max-w-5xl bg-white rounded-xl shadow p-6 space-y-6 mt-8">
                 <h2 className="!text-xl !font-bold text-blue-700">افزودن آزمون جدید</h2>
 
                 <div>

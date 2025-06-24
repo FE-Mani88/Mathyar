@@ -11,10 +11,10 @@ export async function POST(req) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const body = await req.json();
-  const { subject, body } = body;
+  const requestBody = await req.json();
+  const { subject, body } = requestBody;
 
-  if (!subject || !message) {
+  if (!subject || !body) {
     return new Response("Invalid data", { status: 400 });
   }
 

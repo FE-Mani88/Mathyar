@@ -22,7 +22,9 @@ function Login() {
             }
 
             if (!userDetails.phoneNumber || !userDetails.password) {
-                return toast.error('Please fill out all inputs')
+                return toast.error('!لطفا همه فیلد ها رو پر کن', {
+                    theme: 'light'
+                })
             }
 
             const res = await fetch('/api/auth/signin', {
@@ -36,15 +38,29 @@ function Login() {
             const data = await res.json()
 
             if (res.ok) {
-                toast.success('You are logged in successfully')
+                Swal.fire({
+                    icon: 'success',
+                    title: '(: با موفقیت وارد شدید',
+                    confirmButtonText: 'ورود به پنل'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        return router.replace(`/${data.role === 'ADMIN' ? 'admin-panel' : 'user-panel'}`)
+                    }
 
-                setTimeout(() => {
-                    router.replace(data.role === 'ADMIN' ? 'admin-panel' : 'user-panel')
-                }, 2500)
-            } else if (res.status === 405) {
-                toast.error('Invalid Phone Number or Password')
+                    return router.replace('/')
+                })
+            } else if (res.status === 400) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'شماره تلفن یا پسورد وارد شده نامعتبر است',
+                    confirmButtonText: 'متوجه شدم'
+                })
             } else if (res.status === 404) {
-                toast.error('There is not any user with this details')
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'کاربری با مشخصات وارد شده یافت نشد',
+                    confirmButtonText: 'متوجه شدم'
+                })
             }
 
         } catch (error) {
