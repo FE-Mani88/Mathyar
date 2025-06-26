@@ -19,6 +19,7 @@
     "lucide-react": "^0.511.0",
     "moment": "^2.30.1",
     "moment-jalaali": "^0.10.4",
+    "mongodb": "^6.17.0",
     "mongoose": "^8.15.0",
     "next": "15.3.2",
     "npm": "^11.4.1",

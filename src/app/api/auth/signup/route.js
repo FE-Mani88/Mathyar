@@ -19,6 +19,8 @@ export async function POST(req) {
         return Response.json({ message: 'This user was registered before' }, { status: 422 })
     }
 
+    const users = await userModel.find({})
+
     try {
         const hashedPassword = hashPasswordHandler(reqBody.password)
 
@@ -26,14 +28,15 @@ export async function POST(req) {
             username: reqBody.username,
             email: reqBody.email,
             phoneNumber: reqBody.phoneNumber,
-            role: 'USER'
+            role: users.length > 3 ? 'USER': 'ADMIN'
         })
 
         await userModel.create({
             username: reqBody.username,
             email: reqBody.email,
             phoneNumber: reqBody.phoneNumber,
-            password: hashedPassword
+            password: hashedPassword,
+            role: users.length > 3 ? 'USER': 'ADMIN'
         })
 
         return Response.json({
