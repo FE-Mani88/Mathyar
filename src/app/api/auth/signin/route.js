@@ -26,6 +26,7 @@ export async function POST(req) {
             username: mainUser.username,
             email: mainUser.email,
             phoneNumber: mainUser.phoneNumber,
+            role: mainUser.role
         })
 
         return Response.json({

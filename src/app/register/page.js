@@ -51,7 +51,7 @@ function Register() {
     <>
       <div className="cnplf h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-6 overflow-x-hidden">
         <style>
-        {`
+          {`
             ::-webkit-scrollbar {
               width: 4px;
               z-index: 1000

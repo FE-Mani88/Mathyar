@@ -36,7 +36,6 @@ export async function POST(req) {
             email: reqBody.email,
             phoneNumber: reqBody.phoneNumber,
             password: hashedPassword,
-            role: users.length > 3 ? 'USER': 'ADMIN'
         })
 
         return Response.json({

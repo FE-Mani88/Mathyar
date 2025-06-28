@@ -27,7 +27,7 @@ export default function Header({ isUserRegistered, user }) {
                 <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
                 <div className={`cbl28 c0g2c coaq6 cb0ik items-center flex rtl !justify-between flex-row ${isUserRegistered ? ' flex justify-end items-center flex-row-reverse' : 'sm:![direction:ltr]'}`}>
                     {/* Start Search Box */}
-                    <div className={`flex ltr relative left-[40px] sm:left-0 mr-[40px] h-[35px] sm:h-[50px] items-center ${!isUserRegistered ? '!hidden md:!flex' : null} `}>
+                    <div className={`hidden md:flex ltr relative left-[40px] sm:left-0 mr-[40px] h-[35px] sm:h-[50px] items-center ${!isUserRegistered ? '!hidden md:!flex' : null} `}>
                         <div className='h-full bg-white text-black p-1 rounded-l-[20%] sm:rounded-l-[30%] h-[100%] w-10 flex justify-center items-center hover:!bg-gray-300 transition-all cursor-pointer'>
                             <Search />
                         </div>
